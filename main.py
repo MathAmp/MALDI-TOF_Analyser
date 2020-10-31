@@ -47,7 +47,6 @@ b_peak = [1833.711, 1274.734, 2089.932, 2882.583, 1477.706]
 c_peak = [874.428, 1045.555, 1428.569, 1675.743, 1804.753]
 d_peak = [1858.972, 1687.918, 1581.833, 2283.792, 2788.672]
 
-
 alpha_dict = dict()
 beta_dict = dict()
 bsa_dict = dict()
@@ -65,6 +64,20 @@ def get_slice_fragment(sequence):
 def get_ideal_slice_fragment(sequence):
     slice_position = get_slice_position(sequence)
     return [sequence[first: second] for first, second in zip(slice_position, slice_position[1:])]
+
+
+def assignment_len_limit(seq):
+    return 5 <= len(seq) <= 20
+
+
+def print_fragment(sequence):
+    ideal = list(filter(assignment_len_limit, get_ideal_slice_fragment(sequence)))
+    total = list(filter(assignment_len_limit, get_slice_fragment(sequence)))
+    ideal_tuple = [(seq, get_mass(seq)) for seq in ideal]
+    total_tuple = [(seq, get_mass(seq)) for seq in total]
+    diff_tuple = set(total_tuple).difference(set(ideal_tuple))
+    return list(sorted([(name, round(num, 2)) for name, num in ideal_tuple]))
+    #print(list(sorted(diff_tuple)))
 
 
 def get_slice_position(sequence):
